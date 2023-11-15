@@ -1,10 +1,10 @@
 
 terraform {
 
-    backend "remote" {
+    cloud {
         organization = "nr-tmp-org"
         workspaces {
-            name = "ai_pipeline"
+            name = "nr-ai-pipeline"
         }
     }
 
