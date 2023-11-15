@@ -2,9 +2,9 @@
 terraform {
 
     cloud {
-        organization = "jcc2000-org"
+        organization = "nr-tmp-org"
         workspaces {
-            name = "aws-ws"
+            name = "ai_pipeline"
         }
     }
 
