@@ -1,5 +1,7 @@
 .env
 
+.ssh
+
 
 # Local .terraform directories
 **/.terraform/*
