@@ -42,8 +42,6 @@ resource "aws_key_pair" "ssh_key" {
     public_key  = file(".ssh/aws.pub")
 }
 
-#ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC3/nkCYIbzfq/+ET4V0fXe5D7qyo45TV7JTEUJQ+so15fEsaX2kY68g6utcFW7BoHENKlqe7xTJYKDM1HgMytJK9aFUFHgm165hFwLEXu94fus+PT8sJ0vibxpGD7ZZ+/rpEBbtPIBhPNcbQqCBBV/+dBKUI76ATDli76RrFUSjKXby5H1aCMKPm0TmN5wwvTEo2dHptW4nwh5TLaEnYY8ldopoqizZRoEpv8tQNcd2sr6JIBLSVomnjO/NS73UstrgmXb5FXFJKhFQ/STU79e+boggWQplgqUof6ZwK90gEdZnIJE2rNjhItiVeLdVRQ/Oh1O2SYA4p34PXCLO60OG4uB9gm8THmNmRQNEs7kZp7iLKv2tWdGTdTqCu6kZyq1dojQ8iLKhsBlzx/SBrmSPPJHoz2OEvN+8wutPUi59W8H23e6q69LUic8H/VfdP78D7sbgem9Eyjtw9QNU/bg5nwKlbZ/T69sEm+Z2ug0RrUjTp8XNrZEfB+xpexHSzc= xecarlox@pop-os
-
 resource "aws_vpc" "vpc" {
     cidr_block              = var.cidr_vpc
     enable_dns_support      = true
