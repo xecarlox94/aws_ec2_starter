@@ -127,18 +127,18 @@ resource "aws_instance" "app_server" {
 
     provisioner "file" {
         source      = "scripts/init_script.sh"
-        destination = "/tmp/script.sh"
+        destination = "~/script.sh"
     }
 
-#    provisioner "local-exec" {
-#        command = "echo very_nice >> ~/TEST.txt"
+    provisioner "local-exec" {
+        command = "echo very_nice >> ~/TEST.txt"
+    }
+
+#    provisioner "remote-exec" {
+#        inline = [
+#            "~/script.sh"
+#        ]
 #    }
-
-    provisioner "remote-exec" {
-        inline = [
-            "/tmp/script.sh"
-        ]
-    }
 
 #            "chmod +x /tmp/script.sh",
 #            "/tmp/script.sh"
