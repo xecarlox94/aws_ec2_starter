@@ -1,11 +1,11 @@
 terraform {
 
-    cloud {
-        organization = "nr-tmp-org"
-        workspaces {
-            name = "nr-ai-pipeline"
-        }
-    }
+#   cloud {
+#       organization = "nr-tmp-org"
+#       workspaces {
+#           name = "nr-ai-pipeline"
+#       }
+#   }
 
   required_providers {
     aws = {
@@ -106,9 +106,9 @@ resource "tls_private_key" "pk" {
     rsa_bits    = 4096
 }
 
-resource "local_file" "pem_file" {
-    content     = tls_private_key.pk.private_key_pem
-    filename    = "ec2.pem"
+resource "local_sensitive_file" "pem_file" {
+    content                 = tls_private_key.pk.private_key_pem
+    filename                = "${path.module}/.ssh/ec2.pem"
 }
 
 resource "aws_key_pair" "ssh_key" {
@@ -152,3 +152,4 @@ resource "aws_instance" "app_server" {
     }
 
 }
+
