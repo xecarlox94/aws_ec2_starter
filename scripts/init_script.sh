@@ -1,3 +1,5 @@
 #!/bin/bash
 
-echo "did something" > /TEST_script.txt
+sudo apt update &&
+sudo apt install cowsay
+

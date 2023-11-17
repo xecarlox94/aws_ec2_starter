@@ -37,11 +37,6 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
-resource "aws_key_pair" "ssh_key" {
-    key_name    = "ssh_key"
-    public_key  = file(".ssh/aws.pub")
-}
-
 resource "aws_vpc" "vpc" {
     cidr_block              = var.cidr_vpc
     enable_dns_support      = true
@@ -106,51 +101,54 @@ resource  "aws_security_group" "sg" {
 
 }
 
+resource "tls_private_key" "pk" {
+    algorithm   = "RSA"
+    rsa_bits    = 4096
+}
+
+resource "local_file" "pem_file" {
+    content     = tls_private_key.pk.private_key_pem
+    filename    = "ec2.pem"
+}
+
+resource "aws_key_pair" "ssh_key" {
+    key_name    = "myKey"
+    public_key  = tls_private_key.pk.public_key_openssh
+}
+
 
 resource "aws_instance" "app_server" {
 
+    key_name        = aws_key_pair.ssh_key.key_name
+
     ami             = data.aws_ami.ubuntu.id
     instance_type   = "t2.micro"
-
-    key_name        = "ssh_key"
 
     subnet_id                   = aws_subnet.subnet_public.id
     vpc_security_group_ids      = [aws_security_group.sg.id]
     associate_public_ip_address = true
 
+    tags = {
+        Name = var.instance_name
+    }
+
     connection {
         type        = "ssh"
         user        = "ubuntu"
-        private_key = file(".ssh/aws")
+        private_key = tls_private_key.pk.private_key_pem
         host        = self.public_ip
     }
 
     provisioner "file" {
         source      = "scripts/init_script.sh"
-        destination = "~/script.sh"
+        destination = "/tmp/script.sh"
     }
 
-    provisioner "local-exec" {
-        command = "echo very_nice >> ~/TEST.txt"
-    }
-
-#    provisioner "remote-exec" {
-#        inline = [
-#            "~/script.sh"
-#        ]
-#    }
-
-#            "chmod +x /tmp/script.sh",
-#            "/tmp/script.sh"
-#            "rm /tmp/script.sh"
-
-    tags = {
-        Name = var.instance_name
+    provisioner "remote-exec" {
+        inline = [
+            "sudo chmod +x /tmp/script.sh",
+            "sudo /tmp/script.sh"
+        ]
     }
 
 }
-
-
-
-
-
