@@ -1,12 +1,5 @@
 terraform {
 
-#   cloud {
-#       organization = "nr-tmp-org"
-#       workspaces {
-#           name = "nr-ai-pipeline"
-#       }
-#   }
-
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -101,21 +94,6 @@ resource  "aws_security_group" "sg" {
 
 }
 
-resource "tls_private_key" "pk" {
-    algorithm   = "RSA"
-    rsa_bits    = 4096
-}
-
-resource "local_sensitive_file" "pem_file" {
-    content                 = tls_private_key.pk.private_key_pem
-    filename                = "${path.module}/.ssh/ec2.pem"
-}
-
-resource "aws_key_pair" "ssh_key" {
-    key_name    = "myKey"
-    public_key  = tls_private_key.pk.public_key_openssh
-}
-
 
 resource "aws_instance" "app_server" {
 
@@ -151,5 +129,20 @@ resource "aws_instance" "app_server" {
         ]
     }
 
+}
+
+resource "tls_private_key" "pk" {
+    algorithm   = "RSA"
+    rsa_bits    = 4096
+}
+
+resource "local_sensitive_file" "pem_file" {
+    content                 = tls_private_key.pk.private_key_pem
+    filename                = "${path.module}/.ssh/ec2.pem"
+}
+
+resource "aws_key_pair" "ssh_key" {
+    key_name    = "myKey"
+    public_key  = tls_private_key.pk.public_key_openssh
 }
 
